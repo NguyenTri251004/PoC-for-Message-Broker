@@ -1,0 +1,86 @@
+{
+  "status": "PASS",
+  "scenario": "Duplicate message and idempotency",
+  "expectedBehavior": "The same logical event delivered twice decrements stock exactly once; the duplicate is recognised and ignored for both inventory and payment.",
+  "actualBehavior": "Stock decreased exactly once (1000 -> 998) and remained unchanged after the duplicate (998); payment had a single row.",
+  "evidence": {
+    "event": {
+      "eventId": "11111111-1111-4111-8111-111111111111",
+      "orderId": "22222222-2222-4222-8222-222222222222",
+      "customerId": "duplicate-test",
+      "productId": "sku-001",
+      "quantity": 2,
+      "totalAmount": 39.98,
+      "timestamp": "2026-09-28T09:44:15.007Z",
+      "traceId": "trace-duplicate-idempotency",
+      "type": "OrderCreated"
+    },
+    "stockBefore": {
+      "productId": "sku-001",
+      "available": 1000,
+      "reserved": 0
+    },
+    "stockAfterFirst": {
+      "productId": "sku-001",
+      "available": 998,
+      "reserved": 2
+    },
+    "stockAfterDuplicate": {
+      "productId": "sku-001",
+      "available": 998,
+      "reserved": 2
+    },
+    "paymentEventRows": {
+      "raw": "11111111-1111-4111-8111-111111111111|22222222-2222-4222-8222-222222222222|0|payment_processed",
+      "rows": [
+        {
+          "eventId": "11111111-1111-4111-8111-111111111111",
+          "orderId": "22222222-2222-4222-8222-222222222222",
+          "retryCount": "0",
+          "status": "payment_processed"
+        }
+      ]
+    },
+    "inventoryEventRows": {
+      "raw": "11111111-1111-4111-8111-111111111111|22222222-2222-4222-8222-222222222222|2|reserved",
+      "rows": [
+        {
+          "eventId": "11111111-1111-4111-8111-111111111111",
+          "orderId": "22222222-2222-4222-8222-222222222222",
+          "quantity": "2",
+          "status": "reserved"
+        }
+      ]
+    },
+    "paymentDebugState": {
+      "failureMode": "off",
+      "remainingFailures": 0,
+      "crashAfterSuccessOnce": false,
+      "disableRandomFailures": true,
+      "processingDelayMs": 2000,
+      "attempts": [
+        {
+          "eventId": "11111111-1111-4111-8111-111111111111",
+          "orderId": "22222222-2222-4222-8222-222222222222",
+          "retryCount": 0,
+          "at": "2026-09-28T09:44:15.041Z",
+          "decision": "process"
+        },
+        {
+          "eventId": "11111111-1111-4111-8111-111111111111",
+          "orderId": "22222222-2222-4222-8222-222222222222",
+          "retryCount": 0,
+          "at": "2026-09-28T09:44:17.047Z",
+          "decision": "process"
+        }
+      ]
+    },
+    "checks": {
+      "inventoryDecreasedOnce": true,
+      "duplicateIgnored": true,
+      "singlePaymentRow": true,
+      "singleInventoryRow": true
+    }
+  },
+  "test": "E"
+}

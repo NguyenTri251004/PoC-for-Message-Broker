@@ -1,0 +1,14 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./libs/contracts" },
+    { "path": "./libs/common" },
+    { "path": "./libs/messaging" },
+    { "path": "./apps/api-gateway" },
+    { "path": "./apps/order-service" },
+    { "path": "./apps/payment-service" },
+    { "path": "./apps/inventory-service" },
+    { "path": "./apps/notification-service" },
+    { "path": "./apps/analytics-service" }
+  ]
+}

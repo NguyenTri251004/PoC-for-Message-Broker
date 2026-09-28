@@ -1,0 +1,129 @@
+{
+  "status": "PASS",
+  "scenario": "Inventory concurrency and overselling",
+  "expectedBehavior": "Concurrent reservations never drive stock negative and never exceed available stock; the DB remains consistent with no lost updates.",
+  "actualBehavior": "Initial stock 10; 5 of 8 reservations of 2 succeeded (10 units), 3 rejected; final available=0, reserved=10; no overselling or lost updates.",
+  "evidence": {
+    "initialStock": 10,
+    "perRequest": 2,
+    "concurrency": 8,
+    "totalRequested": 16,
+    "responses": [
+      {
+        "status": 201,
+        "ok": true,
+        "durationMs": 13.3,
+        "json": {
+          "success": true,
+          "productId": "sku-001",
+          "remainingStock": 8,
+          "reserved": 2
+        },
+        "text": "{\"success\":true,\"productId\":\"sku-001\",\"remainingStock\":8,\"reserved\":2}"
+      },
+      {
+        "status": 201,
+        "ok": true,
+        "durationMs": 54.9,
+        "json": {
+          "success": true,
+          "productId": "sku-001",
+          "remainingStock": 0,
+          "reserved": 10
+        },
+        "text": "{\"success\":true,\"productId\":\"sku-001\",\"remainingStock\":0,\"reserved\":10}"
+      },
+      {
+        "status": 201,
+        "ok": true,
+        "durationMs": 52.6,
+        "json": {
+          "success": true,
+          "productId": "sku-001",
+          "remainingStock": 2,
+          "reserved": 8
+        },
+        "text": "{\"success\":true,\"productId\":\"sku-001\",\"remainingStock\":2,\"reserved\":8}"
+      },
+      {
+        "status": 201,
+        "ok": true,
+        "durationMs": 49.7,
+        "json": {
+          "success": true,
+          "productId": "sku-001",
+          "remainingStock": 4,
+          "reserved": 6
+        },
+        "text": "{\"success\":true,\"productId\":\"sku-001\",\"remainingStock\":4,\"reserved\":6}"
+      },
+      {
+        "status": 500,
+        "ok": false,
+        "durationMs": 61.4,
+        "json": {
+          "statusCode": 500,
+          "message": "Internal server error"
+        },
+        "text": "{\"statusCode\":500,\"message\":\"Internal server error\"}"
+      },
+      {
+        "status": 201,
+        "ok": true,
+        "durationMs": 20.8,
+        "json": {
+          "success": true,
+          "productId": "sku-001",
+          "remainingStock": 6,
+          "reserved": 4
+        },
+        "text": "{\"success\":true,\"productId\":\"sku-001\",\"remainingStock\":6,\"reserved\":4}"
+      },
+      {
+        "status": 500,
+        "ok": false,
+        "durationMs": 65.6,
+        "json": {
+          "statusCode": 500,
+          "message": "Internal server error"
+        },
+        "text": "{\"statusCode\":500,\"message\":\"Internal server error\"}"
+      },
+      {
+        "status": 500,
+        "ok": false,
+        "durationMs": 65.9,
+        "json": {
+          "statusCode": 500,
+          "message": "Internal server error"
+        },
+        "text": "{\"statusCode\":500,\"message\":\"Internal server error\"}"
+      }
+    ],
+    "elapsedMs": 67.6,
+    "successCount": 5,
+    "rejectedCount": 3,
+    "reservedQuantity": 10,
+    "expectedSuccesses": 5,
+    "stockBefore": {
+      "productId": "sku-001",
+      "available": 10,
+      "reserved": 0
+    },
+    "stockAfter": {
+      "productId": "sku-001",
+      "available": 0,
+      "reserved": 10
+    },
+    "checks": {
+      "neverNegative": true,
+      "neverOversold": true,
+      "dbConsistent": true,
+      "successMatchesCapacity": true,
+      "noLostUpdates": true,
+      "finalAvailable": 0,
+      "finalReserved": 10
+    }
+  },
+  "test": "F"
+}

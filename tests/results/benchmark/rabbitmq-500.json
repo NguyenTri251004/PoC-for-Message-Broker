@@ -1,0 +1,262 @@
+{
+  "mode": "async",
+  "concurrency": 500,
+  "duration": "20s",
+  "iterations": 3,
+  "warmup": {
+    "vus": 5,
+    "duration": "5s"
+  },
+  "runs": [
+    {
+      "iteration": 1,
+      "metrics": {
+        "totalRequests": 9490,
+        "rps": 453.0501890223446,
+        "errorRate": 0,
+        "p50": 430.08263450000004,
+        "p95": 599.4474265999995,
+        "p99": 20475.98840862,
+        "min": 3.217595,
+        "max": 20787.371291,
+        "avg": 1062.3734617538476
+      },
+      "completion": {
+        "paymentEvents": 79,
+        "inventoryEvents": 1001,
+        "orders": 9490
+      },
+      "accepted": 9490,
+      "generatedAt": "2026-09-28T11:51:48.986Z"
+    },
+    {
+      "iteration": 2,
+      "metrics": {
+        "totalRequests": 7659,
+        "rps": 367.5435958150662,
+        "errorRate": 0,
+        "p50": 624.009679,
+        "p95": 6406.479506999999,
+        "p99": 20493.22817992,
+        "min": 73.958332,
+        "max": 20660.925514,
+        "avg": 1321.6043203725028
+      },
+      "completion": {
+        "paymentEvents": 77,
+        "inventoryEvents": 1001,
+        "orders": 7659
+      },
+      "accepted": 7659,
+      "generatedAt": "2026-09-28T11:55:54.611Z"
+    },
+    {
+      "iteration": 3,
+      "metrics": {
+        "totalRequests": 10263,
+        "rps": 494.8143400989,
+        "errorRate": 0,
+        "p50": 593.562548,
+        "p95": 1309.3688568,
+        "p99": 11491.397301759998,
+        "min": 142.514342,
+        "max": 20611.714712,
+        "avg": 989.5406682331717
+      },
+      "completion": {
+        "paymentEvents": 79,
+        "inventoryEvents": 1002,
+        "orders": 10263
+      },
+      "accepted": 10263,
+      "generatedAt": "2026-09-28T12:00:05.888Z"
+    }
+  ],
+  "aggregate": {
+    "totalRequests": {
+      "mean": 9137.33,
+      "min": 7659,
+      "max": 10263,
+      "values": [
+        9490,
+        7659,
+        10263
+      ]
+    },
+    "rps": {
+      "mean": 438.47,
+      "min": 367.54,
+      "max": 494.81,
+      "values": [
+        453.05,
+        367.54,
+        494.81
+      ]
+    },
+    "errorRate": {
+      "mean": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+        0,
+        0,
+        0
+      ]
+    },
+    "p50": {
+      "mean": 549.22,
+      "min": 430.08,
+      "max": 624.01,
+      "values": [
+        430.08,
+        624.01,
+        593.56
+      ]
+    },
+    "p95": {
+      "mean": 2771.77,
+      "min": 599.45,
+      "max": 6406.48,
+      "values": [
+        599.45,
+        6406.48,
+        1309.37
+      ]
+    },
+    "p99": {
+      "mean": 17486.87,
+      "min": 11491.4,
+      "max": 20493.23,
+      "values": [
+        20475.99,
+        20493.23,
+        11491.4
+      ]
+    },
+    "min": {
+      "mean": 73.23,
+      "min": 3.22,
+      "max": 142.51,
+      "values": [
+        3.22,
+        73.96,
+        142.51
+      ]
+    },
+    "max": {
+      "mean": 20686.67,
+      "min": 20611.71,
+      "max": 20787.37,
+      "values": [
+        20787.37,
+        20660.93,
+        20611.71
+      ]
+    },
+    "avg": {
+      "mean": 1124.51,
+      "min": 989.54,
+      "max": 1321.6,
+      "values": [
+        1062.37,
+        1321.6,
+        989.54
+      ]
+    }
+  },
+  "downstreamCompletion": {
+    "databaseEvents": {
+      "orders": 10263,
+      "paymentEvents": 80,
+      "inventoryEvents": 1002,
+      "finalInventory": {
+        "available": 0,
+        "reserved": 1000
+      },
+      "totalAcceptedRequests": 27412,
+      "duplicatePaymentEffects": 0,
+      "duplicateInventoryEffects": 0,
+      "dlqMessages": 1775,
+      "note": "Async: notifications/analytics are in-memory (reported via /debug endpoints); payment/inventory persist to PostgreSQL."
+    },
+    "queueState": [
+      {
+        "name": "payment.order.queue.dlq",
+        "messages": 0,
+        "messagesReady": 0,
+        "messagesUnacknowledged": 0
+      },
+      {
+        "name": "payment.order.queue",
+        "messages": 97149,
+        "messagesReady": 97148,
+        "messagesUnacknowledged": 1
+      },
+      {
+        "name": "notification.order.queue.dlq",
+        "messages": 0,
+        "messagesReady": 0,
+        "messagesUnacknowledged": 0
+      },
+      {
+        "name": "inventory.order.queue",
+        "messages": 51964,
+        "messagesReady": 51963,
+        "messagesUnacknowledged": 1
+      },
+      {
+        "name": "inventory.order.queue.dlq",
+        "messages": 1775,
+        "messagesReady": 1775,
+        "messagesUnacknowledged": 0
+      },
+      {
+        "name": "notification.order.queue",
+        "messages": 94395,
+        "messagesReady": 94394,
+        "messagesUnacknowledged": 1
+      },
+      {
+        "name": "analytics.order.queue",
+        "messages": 90216,
+        "messagesReady": 90215,
+        "messagesUnacknowledged": 1
+      },
+      {
+        "name": "analytics.order.queue.dlq",
+        "messages": 0,
+        "messagesReady": 0,
+        "messagesUnacknowledged": 0
+      }
+    ],
+    "queueDrainTimedOut": true,
+    "drainWindowMs": 60000,
+    "drainSecondsUsed": 63.5,
+    "remainingBacklogMessages": 333559,
+    "consumerProcessingCount": 4
+  },
+  "environment": {
+    "note": "Local development environment - NOT a production capacity estimate.",
+    "os": "Windows 11 Home Single Language",
+    "cpu": "AMD Ryzen 5 5625U (6C/12T)",
+    "ramGb": 7.4,
+    "docker": "29.0.1",
+    "node": "v24.15.0",
+    "k6": "grafana/k6 (docker image)",
+    "concurrency": [
+      100,
+      500,
+      1000
+    ],
+    "duration": "20s",
+    "iterations": 3,
+    "delaysMs": {
+      "payment": 2000,
+      "inventory": 100,
+      "notification": 1000,
+      "analytics": 500
+    },
+    "initialStock": 1000000
+  },
+  "generatedAt": "2026-09-28T12:00:10.413Z"
+}

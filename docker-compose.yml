@@ -1,0 +1,114 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-ecommerce}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    restart: unless-stopped
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-guest}
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: ./apps/api-gateway/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - '3000:3000'
+    depends_on:
+      - order-service
+
+  order-service:
+    build:
+      context: .
+      dockerfile: ./apps/order-service/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - '3001:3001'
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  payment-service:
+    build:
+      context: .
+      dockerfile: ./apps/payment-service/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # Benchmark-configurable downstream processing delays (shared by the sync
+      # baseline and the RabbitMQ consumers).
+      PAYMENT_PROCESSING_DELAY_MS: ${PAYMENT_PROCESSING_DELAY_MS:-2000}
+    ports:
+      - '3002:3002'
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  inventory-service:
+    build:
+      context: .
+      dockerfile: ./apps/inventory-service/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      INVENTORY_PROCESSING_DELAY_MS: ${INVENTORY_PROCESSING_DELAY_MS:-100}
+    ports:
+      - '3003:3003'
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: ./apps/notification-service/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NOTIFICATION_PROCESSING_DELAY_MS: ${NOTIFICATION_PROCESSING_DELAY_MS:-1000}
+    ports:
+      - '3004:3004'
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  analytics-service:
+    build:
+      context: .
+      dockerfile: ./apps/analytics-service/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      ANALYTICS_PROCESSING_DELAY_MS: ${ANALYTICS_PROCESSING_DELAY_MS:-500}
+    ports:
+      - '3005:3005'
+    depends_on:
+      - postgres
+      - rabbitmq
+
+volumes:
+  postgres_data:
+
+

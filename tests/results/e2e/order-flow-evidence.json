@@ -1,0 +1,121 @@
+{
+    "timestamp":  "2026-09-28T09:39:21.3706771Z",
+    "health":  [
+                   {
+                       "status":  "ok",
+                       "service":  "api-gateway",
+                       "timestamp":  "2026-09-28T09:39:21.617Z",
+                       "version":  "1.0.0"
+                   },
+                   {
+                       "status":  "ok",
+                       "service":  "order-service",
+                       "timestamp":  "2026-09-28T09:39:21.768Z",
+                       "version":  "1.0.0"
+                   },
+                   {
+                       "status":  "ok",
+                       "service":  "payment-service",
+                       "timestamp":  "2026-09-28T09:39:21.837Z",
+                       "version":  "1.0.0",
+                       "consumer":  "connected"
+                   },
+                   {
+                       "status":  "ok",
+                       "service":  "inventory-service",
+                       "timestamp":  "2026-09-28T09:39:22.041Z",
+                       "version":  "1.0.0",
+                       "consumer":  "connected",
+                       "stock":  999
+                   },
+                   {
+                       "status":  "ok",
+                       "service":  "notification-service",
+                       "timestamp":  "2026-09-28T09:39:22.077Z",
+                       "version":  "1.0.0",
+                       "consumer":  "connected"
+                   },
+                   {
+                       "status":  "ok",
+                       "service":  "analytics-service",
+                       "timestamp":  "2026-09-28T09:39:22.115Z",
+                       "version":  "1.0.0",
+                       "consumer":  "connected"
+                   }
+               ],
+    "orderResponse":  {
+                          "success":  true,
+                          "orderId":  "bec3758a-ba05-45a1-ad8d-91f401132767",
+                          "eventId":  "f9067535-5399-4464-ab32-346d88033295",
+                          "traceId":  "trace-1790588362194-7bacd037",
+                          "status":  "accepted",
+                          "message":  "Order accepted for async processing",
+                          "mode":  "async"
+                      },
+    "postgres":  "                  id                  |     customer_id     | product_id | quantity | total_amount | status  |          created_at           \n--------------------------------------+---------------------+------------+----------+--------------+---------+-------------------------------\n bec3758a-ba05-45a1-ad8d-91f401132767 | cust-e2e-001        | sku-001    |        2 |       149.99 | created | 2026-09-28 09:39:22.199922+00\n 65711c08-f9b6-4b91-8aba-4e26dd7ce949 | slow-consumers      | sku-001    |        1 |        12.99 | created | 2026-09-28 09:34:17.567665+00\n 7d750d56-0872-47ae-b5cf-a1f592ffa051 | fail-crash-recovery | sku-001    |        1 |         9.99 | created | 2026-09-28 09:33:31.319732+00\n e2923aae-176e-4aa4-864e-8e12dcfe26bb | fail-payment-dlq    | sku-001    |        1 |        24.99 | created | 2026-09-28 09:33:13.762011+00\n 61f6f4ff-8912-4e0c-9ed0-c1a85146e116 | fail-payment-retry  | sku-001    |        1 |        19.99 | created | 2026-09-28 09:32:57.786319+00\n(5 rows)\n",
+    "rabbitmq":  "Timeout: 60.0 seconds ...\nListing queues for vhost / ...\nname\tmessages\tmessages_ready\tmessages_unacknowledged\npayment.order.queue.dlq\t0\t0\t0\npayment.order.queue\t0\t0\t0\nnotification.order.queue.dlq\t0\t0\t0\ninventory.order.queue\t0\t0\t0\ninventory.order.queue.dlq\t0\t0\t0\nnotification.order.queue\t0\t0\t0\nanalytics.order.queue\t0\t0\t0\nanalytics.order.queue.dlq\t0\t0\t0",
+    "consumerState":  {
+                          "payment":  {
+                                          "count":  2,
+                                          "events":  [
+                                                         {
+                                                             "eventId":  "f9067535-5399-4464-ab32-346d88033295",
+                                                             "orderId":  "bec3758a-ba05-45a1-ad8d-91f401132767",
+                                                             "traceId":  "trace-1790588362194-7bacd037",
+                                                             "retryCount":  0,
+                                                             "status":  "payment_processed",
+                                                             "processedAt":  "2026-09-28T09:39:24.262Z",
+                                                             "lastAttemptAt":  "2026-09-28T09:39:24.262Z",
+                                                             "lastFailureReason":  null
+                                                         },
+                                                         {
+                                                             "eventId":  "6fd97d85-7760-4128-ba46-3cef087f7b85",
+                                                             "orderId":  "65711c08-f9b6-4b91-8aba-4e26dd7ce949",
+                                                             "traceId":  "trace-1790588057566-bca47345",
+                                                             "retryCount":  0,
+                                                             "status":  "payment_processed",
+                                                             "processedAt":  "2026-09-28T09:34:19.586Z",
+                                                             "lastAttemptAt":  "2026-09-28T09:34:19.586Z",
+                                                             "lastFailureReason":  null
+                                                         }
+                                                     ]
+                                      },
+                          "inventory":  {
+                                            "productId":  "sku-001",
+                                            "available":  997,
+                                            "reserved":  3
+                                        },
+                          "notification":  {
+                                               "count":  2,
+                                               "items":  [
+                                                             {
+                                                                 "orderId":  "65711c08-f9b6-4b91-8aba-4e26dd7ce949",
+                                                                 "at":  "2026-09-28T09:34:20.581Z",
+                                                                 "traceId":  "trace-1790588057566-bca47345"
+                                                             },
+                                                             {
+                                                                 "orderId":  "bec3758a-ba05-45a1-ad8d-91f401132767",
+                                                                 "at":  "2026-09-28T09:39:25.252Z",
+                                                                 "traceId":  "trace-1790588362194-7bacd037"
+                                                             }
+                                                         ],
+                                               "processingDelayMs":  3000
+                                           },
+                          "analytics":  {
+                                            "count":  2,
+                                            "items":  [
+                                                          {
+                                                              "orderId":  "65711c08-f9b6-4b91-8aba-4e26dd7ce949",
+                                                              "at":  "2026-09-28T09:34:20.579Z",
+                                                              "traceId":  "trace-1790588057566-bca47345"
+                                                          },
+                                                          {
+                                                              "orderId":  "bec3758a-ba05-45a1-ad8d-91f401132767",
+                                                              "at":  "2026-09-28T09:39:25.243Z",
+                                                              "traceId":  "trace-1790588362194-7bacd037"
+                                                          }
+                                                      ],
+                                            "processingDelayMs":  3000
+                                        }
+                      }
+}

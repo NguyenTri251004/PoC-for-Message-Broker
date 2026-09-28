@@ -1,0 +1,28 @@
+{
+  "name": "message-queue-poc",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/*",
+    "libs/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace=@poc/common && npm run build --workspace=@poc/contracts && npm run build --workspace=@poc/messaging && npm run build --workspace=@poc/api-gateway && npm run build --workspace=@poc/order-service && npm run build --workspace=@poc/payment-service && npm run build --workspace=@poc/inventory-service && npm run build --workspace=@poc/notification-service && npm run build --workspace=@poc/analytics-service",
+    "dev:up": "docker compose up --build -d",
+    "dev:down": "docker compose down -v",
+    "test:baseline": "k6 run tests/k6/baseline-synchronous.js",
+    "test:rabbitmq": "k6 run tests/k6/rabbitmq-async.js",
+        "test:failure": "node tests/failure/run-failure-suite.mjs",
+    "test:concurrency": "node tests/concurrency/run-load.mjs",
+    "test:load": "node tests/concurrency/run-load.mjs 500",
+    "typecheck": "tsc -b apps/* libs/*"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.3.1",
+    "@types/express": "^5.0.0",
+    "@types/node": "^20.14.10",
+    "@types/pg": "^8.11.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}

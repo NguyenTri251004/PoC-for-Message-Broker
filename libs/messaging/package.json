@@ -1,0 +1,16 @@
+{
+  "name": "@poc/messaging",
+  "version": "1.0.0",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.0"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.10.0",
+    "typescript": "^5.5.4"
+  }
+}

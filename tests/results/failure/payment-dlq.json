@@ -1,0 +1,105 @@
+{
+  "status": "PASS",
+  "scenario": "Poison payment message and DLQ",
+  "expectedBehavior": "A permanently failing message is retried up to the configured limit then moved to the DLQ; no infinite retry and consumers stay healthy.",
+  "actualBehavior": "Message retried up to the 3-retry limit (attempts observed: 4), main queue drained, message dead-lettered to payment.order.queue.dlq.",
+  "evidence": {
+    "queueName": "payment.order.queue",
+    "dlqName": "payment.order.queue.dlq",
+    "configuredMaxRetries": 3,
+    "initialEventId": "f380a080-8e79-4018-9b85-9b851921759e",
+    "orderId": "ee01c0ad-0859-4c6b-ac71-8c15686b35ea",
+    "apiResponse": {
+      "status": 201,
+      "ok": true,
+      "durationMs": 28.2,
+      "json": {
+        "success": true,
+        "orderId": "ee01c0ad-0859-4c6b-ac71-8c15686b35ea",
+        "eventId": "f380a080-8e79-4018-9b85-9b851921759e",
+        "traceId": "trace-1790588617160-db994491",
+        "status": "accepted",
+        "message": "Order accepted for async processing",
+        "mode": "async"
+      },
+      "text": "{\"success\":true,\"orderId\":\"ee01c0ad-0859-4c6b-ac71-8c15686b35ea\",\"eventId\":\"f380a080-8e79-4018-9b85-9b851921759e\",\"traceId\":\"trace-1790588617160-db994491\",\"status\":\"accepted\",\"message\":\"Order accepted for async processing\",\"mode\":\"async\"}"
+    },
+    "attempts": [
+      {
+        "eventId": "f380a080-8e79-4018-9b85-9b851921759e",
+        "orderId": "ee01c0ad-0859-4c6b-ac71-8c15686b35ea",
+        "retryCount": 0,
+        "at": "2026-09-28T09:43:37.187Z",
+        "decision": "always-fail"
+      },
+      {
+        "eventId": "f380a080-8e79-4018-9b85-9b851921759e",
+        "orderId": "ee01c0ad-0859-4c6b-ac71-8c15686b35ea",
+        "retryCount": 1,
+        "at": "2026-09-28T09:43:37.191Z",
+        "decision": "always-fail"
+      },
+      {
+        "eventId": "f380a080-8e79-4018-9b85-9b851921759e",
+        "orderId": "ee01c0ad-0859-4c6b-ac71-8c15686b35ea",
+        "retryCount": 2,
+        "at": "2026-09-28T09:43:37.237Z",
+        "decision": "always-fail"
+      },
+      {
+        "eventId": "f380a080-8e79-4018-9b85-9b851921759e",
+        "orderId": "ee01c0ad-0859-4c6b-ac71-8c15686b35ea",
+        "retryCount": 3,
+        "at": "2026-09-28T09:43:37.283Z",
+        "decision": "always-fail"
+      }
+    ],
+    "attemptCount": 4,
+    "dlqState": [
+      {
+        "name": "payment.order.queue",
+        "messages": 0,
+        "messagesReady": 0,
+        "messagesUnacknowledged": 0
+      },
+      {
+        "name": "payment.order.queue.dlq",
+        "messages": 1,
+        "messagesReady": 1,
+        "messagesUnacknowledged": 0
+      }
+    ],
+    "finalQueueState": [
+      {
+        "name": "payment.order.queue",
+        "messages": 0,
+        "messagesReady": 0,
+        "messagesUnacknowledged": 0
+      },
+      {
+        "name": "payment.order.queue.dlq",
+        "messages": 1,
+        "messagesReady": 1,
+        "messagesUnacknowledged": 0
+      }
+    ],
+    "paymentEventRows": {
+      "raw": "",
+      "rows": []
+    },
+    "otherConsumersHealthy": {
+      "inventory": true,
+      "notification": true,
+      "analytics": true
+    },
+    "checks": {
+      "movedToDlq": true,
+      "mainQueueDrained": true,
+      "noInfiniteRetry": true,
+      "noBusinessRecord": true,
+      "consumersHealthy": true,
+      "dlqMessages": 1
+    }
+  },
+  "test": "C"
+}

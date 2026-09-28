@@ -1,0 +1,79 @@
+{
+  "status": "PASS",
+  "scenario": "Slow notification and analytics",
+  "expectedBehavior": "Order acceptance and persistence remain fast while slow Notification/Analytics consumers process asynchronously.",
+  "actualBehavior": "Order API responded in 114.9ms (below the 3000ms consumer delay); order persisted immediately; payment/inventory proceeded and slow consumers completed later.",
+  "evidence": {
+    "configuredDelayMs": 3000,
+    "apiResponse": {
+      "status": 201,
+      "ok": true,
+      "durationMs": 114.9,
+      "json": {
+        "success": true,
+        "orderId": "dce10c82-c95a-48ff-bf48-0f2b45784b7f",
+        "eventId": "573162c0-c26e-4471-b063-5384f7f7d455",
+        "traceId": "trace-1790588684083-af3d5287",
+        "status": "accepted",
+        "message": "Order accepted for async processing",
+        "mode": "async"
+      },
+      "text": "{\"success\":true,\"orderId\":\"dce10c82-c95a-48ff-bf48-0f2b45784b7f\",\"eventId\":\"573162c0-c26e-4471-b063-5384f7f7d455\",\"traceId\":\"trace-1790588684083-af3d5287\",\"status\":\"accepted\",\"message\":\"Order accepted for async processing\",\"mode\":\"async\"}"
+    },
+    "elapsedMs": 114.9,
+    "orderId": "dce10c82-c95a-48ff-bf48-0f2b45784b7f",
+    "timestamps": {
+      "requestStart": "2026-09-28T09:44:44.042Z",
+      "acceptedAt": "2026-09-28T09:44:44.157Z",
+      "persistedAt": "2026-09-28T09:44:44.494Z",
+      "paymentAt": "2026-09-28T09:44:46.533Z",
+      "notificationAt": "2026-09-28T09:44:47.546Z",
+      "analyticsAt": "2026-09-28T09:44:47.551Z"
+    },
+    "orderPersistence": "dce10c82-c95a-48ff-bf48-0f2b45784b7f|slow-consumers|sku-001|1|12.99|created|2026-09-28 09:44:44.086838+00",
+    "paymentProcessedState": {
+      "count": 1,
+      "events": [
+        {
+          "eventId": "573162c0-c26e-4471-b063-5384f7f7d455",
+          "orderId": "dce10c82-c95a-48ff-bf48-0f2b45784b7f",
+          "traceId": "trace-1790588684083-af3d5287",
+          "retryCount": 0,
+          "status": "payment_processed",
+          "processedAt": "2026-09-28T09:44:46.120Z",
+          "lastAttemptAt": "2026-09-28T09:44:46.120Z",
+          "lastFailureReason": null
+        }
+      ]
+    },
+    "notificationState": {
+      "count": 1,
+      "items": [
+        {
+          "orderId": "dce10c82-c95a-48ff-bf48-0f2b45784b7f",
+          "at": "2026-09-28T09:44:47.119Z",
+          "traceId": "trace-1790588684083-af3d5287"
+        }
+      ],
+      "processingDelayMs": 3000
+    },
+    "analyticsState": {
+      "count": 1,
+      "items": [
+        {
+          "orderId": "dce10c82-c95a-48ff-bf48-0f2b45784b7f",
+          "at": "2026-09-28T09:44:47.115Z",
+          "traceId": "trace-1790588684083-af3d5287"
+        }
+      ],
+      "processingDelayMs": 3000
+    },
+    "checks": {
+      "orderNotBlocked": true,
+      "persistedImmediately": true,
+      "paymentIndependent": true,
+      "consumersCompleted": true
+    }
+  },
+  "test": "G"
+}

@@ -1,0 +1,112 @@
+{
+  "status": "PASS",
+  "scenario": "Intermittent payment failure with retry",
+  "expectedBehavior": "First N attempts fail, retries increase, the message is preserved and eventually processed exactly once without blocking the order.",
+  "actualBehavior": "Payment failed 2 times, was retried through the broker, and succeeded once with a single durable record (retry_count=2).",
+  "evidence": {
+    "apiResponse": {
+      "status": 201,
+      "ok": true,
+      "durationMs": 33.2,
+      "json": {
+        "success": true,
+        "orderId": "4d379b17-b0d6-412b-a137-4c81ded94634",
+        "eventId": "18ecdc03-090d-433a-9c47-14c2e1e2bf38",
+        "traceId": "trace-1790588601307-641589af",
+        "status": "accepted",
+        "message": "Order accepted for async processing",
+        "mode": "async"
+      },
+      "text": "{\"success\":true,\"orderId\":\"4d379b17-b0d6-412b-a137-4c81ded94634\",\"eventId\":\"18ecdc03-090d-433a-9c47-14c2e1e2bf38\",\"traceId\":\"trace-1790588601307-641589af\",\"status\":\"accepted\",\"message\":\"Order accepted for async processing\",\"mode\":\"async\"}"
+    },
+    "orderId": "4d379b17-b0d6-412b-a137-4c81ded94634",
+    "attempts": [
+      {
+        "eventId": "18ecdc03-090d-433a-9c47-14c2e1e2bf38",
+        "orderId": "4d379b17-b0d6-412b-a137-4c81ded94634",
+        "retryCount": 0,
+        "at": "2026-09-28T09:43:21.332Z",
+        "decision": "fail-first-n"
+      },
+      {
+        "eventId": "18ecdc03-090d-433a-9c47-14c2e1e2bf38",
+        "orderId": "4d379b17-b0d6-412b-a137-4c81ded94634",
+        "retryCount": 1,
+        "at": "2026-09-28T09:43:21.339Z",
+        "decision": "fail-first-n"
+      },
+      {
+        "eventId": "18ecdc03-090d-433a-9c47-14c2e1e2bf38",
+        "orderId": "4d379b17-b0d6-412b-a137-4c81ded94634",
+        "retryCount": 2,
+        "at": "2026-09-28T09:43:21.385Z",
+        "decision": "process"
+      }
+    ],
+    "failureAttempts": [
+      {
+        "eventId": "18ecdc03-090d-433a-9c47-14c2e1e2bf38",
+        "orderId": "4d379b17-b0d6-412b-a137-4c81ded94634",
+        "retryCount": 0,
+        "at": "2026-09-28T09:43:21.332Z",
+        "decision": "fail-first-n"
+      },
+      {
+        "eventId": "18ecdc03-090d-433a-9c47-14c2e1e2bf38",
+        "orderId": "4d379b17-b0d6-412b-a137-4c81ded94634",
+        "retryCount": 1,
+        "at": "2026-09-28T09:43:21.339Z",
+        "decision": "fail-first-n"
+      }
+    ],
+    "debugState": {
+      "failureMode": "fail-first-n",
+      "remainingFailures": 0,
+      "crashAfterSuccessOnce": false,
+      "disableRandomFailures": true,
+      "processingDelayMs": 2000,
+      "attempts": [
+        {
+          "eventId": "18ecdc03-090d-433a-9c47-14c2e1e2bf38",
+          "orderId": "4d379b17-b0d6-412b-a137-4c81ded94634",
+          "retryCount": 0,
+          "at": "2026-09-28T09:43:21.332Z",
+          "decision": "fail-first-n"
+        },
+        {
+          "eventId": "18ecdc03-090d-433a-9c47-14c2e1e2bf38",
+          "orderId": "4d379b17-b0d6-412b-a137-4c81ded94634",
+          "retryCount": 1,
+          "at": "2026-09-28T09:43:21.339Z",
+          "decision": "fail-first-n"
+        },
+        {
+          "eventId": "18ecdc03-090d-433a-9c47-14c2e1e2bf38",
+          "orderId": "4d379b17-b0d6-412b-a137-4c81ded94634",
+          "retryCount": 2,
+          "at": "2026-09-28T09:43:21.385Z",
+          "decision": "process"
+        }
+      ]
+    },
+    "paymentEventRows": {
+      "raw": "18ecdc03-090d-433a-9c47-14c2e1e2bf38|4d379b17-b0d6-412b-a137-4c81ded94634|2|payment_processed",
+      "rows": [
+        {
+          "eventId": "18ecdc03-090d-433a-9c47-14c2e1e2bf38",
+          "orderId": "4d379b17-b0d6-412b-a137-4c81ded94634",
+          "retryCount": "2",
+          "status": "payment_processed"
+        }
+      ]
+    },
+    "checks": {
+      "retriedAtLeastTwice": true,
+      "retryCountIncreased": true,
+      "exactlyOneBusinessRow": true,
+      "orderNotBlocked": true,
+      "retryCount": "2"
+    }
+  },
+  "test": "B"
+}

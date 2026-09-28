@@ -1,0 +1,85 @@
+{
+  "status": "PASS",
+  "scenario": "Consumer crash and restart",
+  "expectedBehavior": "Crashing the consumer after a durable write causes RabbitMQ to redeliver the unacked message; idempotency prevents a duplicate business effect.",
+  "actualBehavior": "Payment consumer crashed after the durable write, was restarted, redelivered the message, and the business record remained single-copy.",
+  "evidence": {
+    "apiResponse": {
+      "status": 201,
+      "ok": true,
+      "durationMs": 21,
+      "json": {
+        "success": true,
+        "orderId": "c862a311-8a13-49c7-9d36-acc6f6e81982",
+        "eventId": "ea8a590f-ec7f-4036-b6ac-f9bd4b9c5dd8",
+        "traceId": "trace-1790588635416-37489d11",
+        "status": "accepted",
+        "message": "Order accepted for async processing",
+        "mode": "async"
+      },
+      "text": "{\"success\":true,\"orderId\":\"c862a311-8a13-49c7-9d36-acc6f6e81982\",\"eventId\":\"ea8a590f-ec7f-4036-b6ac-f9bd4b9c5dd8\",\"traceId\":\"trace-1790588635416-37489d11\",\"status\":\"accepted\",\"message\":\"Order accepted for async processing\",\"mode\":\"async\"}"
+    },
+    "orderId": "c862a311-8a13-49c7-9d36-acc6f6e81982",
+    "restartsBefore": 0,
+    "restartsAfterCrash": 1,
+    "redeliveryObservation": {
+      "note": "Redelivery inferred from duplicate consumer attempts for the crashed event.",
+      "attempts": [
+        {
+          "eventId": "ea8a590f-ec7f-4036-b6ac-f9bd4b9c5dd8",
+          "orderId": "c862a311-8a13-49c7-9d36-acc6f6e81982",
+          "retryCount": 0,
+          "at": "2026-09-28T09:43:59.367Z",
+          "decision": "process"
+        }
+      ]
+    },
+    "processedState": {
+      "count": 1,
+      "events": [
+        {
+          "eventId": "ea8a590f-ec7f-4036-b6ac-f9bd4b9c5dd8",
+          "orderId": "c862a311-8a13-49c7-9d36-acc6f6e81982",
+          "traceId": "trace-1790588635416-37489d11",
+          "retryCount": 0,
+          "status": "payment_processed",
+          "processedAt": "2026-09-28T09:43:57.432Z",
+          "lastAttemptAt": "2026-09-28T09:43:57.432Z",
+          "lastFailureReason": null
+        }
+      ]
+    },
+    "paymentEventRows": {
+      "raw": "ea8a590f-ec7f-4036-b6ac-f9bd4b9c5dd8|c862a311-8a13-49c7-9d36-acc6f6e81982|0|payment_processed",
+      "rows": [
+        {
+          "eventId": "ea8a590f-ec7f-4036-b6ac-f9bd4b9c5dd8",
+          "orderId": "c862a311-8a13-49c7-9d36-acc6f6e81982",
+          "retryCount": "0",
+          "status": "payment_processed"
+        }
+      ]
+    },
+    "queueState": [
+      {
+        "name": "payment.order.queue",
+        "messages": 0,
+        "messagesReady": 0,
+        "messagesUnacknowledged": 0
+      },
+      {
+        "name": "payment.order.queue.dlq",
+        "messages": 0,
+        "messagesReady": 0,
+        "messagesUnacknowledged": 0
+      }
+    ],
+    "checks": {
+      "crashed": true,
+      "recoveredExactlyOnce": true,
+      "idempotent": true,
+      "businessRows": 1
+    }
+  },
+  "test": "D"
+}

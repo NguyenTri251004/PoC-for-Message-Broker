@@ -1,0 +1,91 @@
+{
+  "status": "PASS",
+  "scenario": "Payment service unavailable",
+  "expectedBehavior": "Order service accepts and persists while payment is down; the event stays in RabbitMQ and is processed exactly once after restart.",
+  "actualBehavior": "Order accepted and persisted while payment was stopped; the event remained queued and was processed exactly once after restart.",
+  "evidence": {
+    "paymentDownAt": "2026-09-28T09:42:57.150Z",
+    "paymentUpAt": "2026-09-28T09:43:04.506Z",
+    "paymentHealthyWhileDown": false,
+    "apiResponse": {
+      "status": 201,
+      "ok": true,
+      "durationMs": 124.8,
+      "json": {
+        "success": true,
+        "orderId": "79cd6116-80af-4f2a-9336-23bff3e21bed",
+        "eventId": "a4781dcb-eea0-4d73-add9-8670b34fd50d",
+        "traceId": "trace-1790588577309-f74a1cd7",
+        "status": "accepted",
+        "message": "Order accepted for async processing",
+        "mode": "async"
+      },
+      "text": "{\"success\":true,\"orderId\":\"79cd6116-80af-4f2a-9336-23bff3e21bed\",\"eventId\":\"a4781dcb-eea0-4d73-add9-8670b34fd50d\",\"traceId\":\"trace-1790588577309-f74a1cd7\",\"status\":\"accepted\",\"message\":\"Order accepted for async processing\",\"mode\":\"async\"}"
+    },
+    "orderId": "79cd6116-80af-4f2a-9336-23bff3e21bed",
+    "orderPersistence": "79cd6116-80af-4f2a-9336-23bff3e21bed|fail-payment-unavailable|sku-001|2|149.99|created",
+    "queueWhileDown": [
+      {
+        "name": "payment.order.queue",
+        "messages": 1,
+        "messagesReady": 1,
+        "messagesUnacknowledged": 0
+      },
+      {
+        "name": "payment.order.queue.dlq",
+        "messages": 0,
+        "messagesReady": 0,
+        "messagesUnacknowledged": 0
+      }
+    ],
+    "queueAfterRestart": [
+      {
+        "name": "payment.order.queue",
+        "messages": 0,
+        "messagesReady": 0,
+        "messagesUnacknowledged": 0
+      },
+      {
+        "name": "payment.order.queue.dlq",
+        "messages": 0,
+        "messagesReady": 0,
+        "messagesUnacknowledged": 0
+      }
+    ],
+    "processedPaymentState": {
+      "count": 1,
+      "events": [
+        {
+          "eventId": "a4781dcb-eea0-4d73-add9-8670b34fd50d",
+          "orderId": "79cd6116-80af-4f2a-9336-23bff3e21bed",
+          "traceId": "trace-1790588577309-f74a1cd7",
+          "retryCount": 0,
+          "status": "payment_processed",
+          "processedAt": "2026-09-28T09:43:05.130Z",
+          "lastAttemptAt": "2026-09-28T09:43:05.130Z",
+          "lastFailureReason": null
+        }
+      ]
+    },
+    "paymentEventRows": {
+      "raw": "a4781dcb-eea0-4d73-add9-8670b34fd50d|79cd6116-80af-4f2a-9336-23bff3e21bed|0|payment_processed",
+      "rows": [
+        {
+          "eventId": "a4781dcb-eea0-4d73-add9-8670b34fd50d",
+          "orderId": "79cd6116-80af-4f2a-9336-23bff3e21bed",
+          "retryCount": "0",
+          "status": "payment_processed"
+        }
+      ]
+    },
+    "checks": {
+      "orderWasAcceptedWhilePaymentDown": true,
+      "orderPersisted": true,
+      "messageWasQueued": true,
+      "recovered": true,
+      "noDuplicatePayment": true,
+      "duplicatePaymentsForOrder": 1
+    }
+  },
+  "test": "A"
+}

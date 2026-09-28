@@ -1,0 +1,205 @@
+{
+  "mode": "async",
+  "concurrency": 100,
+  "duration": "10s",
+  "iterations": 1,
+  "warmup": {
+    "vus": 3,
+    "duration": "3s"
+  },
+  "runs": [
+    {
+      "iteration": 1,
+      "metrics": {
+        "totalRequests": 3499,
+        "rps": 345.9056987044083,
+        "errorRate": 0,
+        "p50": 235.739281,
+        "p95": 394.02730519999994,
+        "p99": 2603.08740534,
+        "min": 67.808424,
+        "max": 2684.376552,
+        "avg": 287.0217536890541
+      },
+      "completion": {
+        "paymentEvents": 101,
+        "inventoryEvents": 51503,
+        "orders": 3499
+      },
+      "accepted": 3499,
+      "generatedAt": "2026-09-28T12:24:25.654Z"
+    }
+  ],
+  "aggregate": {
+    "totalRequests": {
+      "mean": 3499,
+      "min": 3499,
+      "max": 3499,
+      "values": [
+        3499
+      ]
+    },
+    "rps": {
+      "mean": 345.91,
+      "min": 345.91,
+      "max": 345.91,
+      "values": [
+        345.91
+      ]
+    },
+    "errorRate": {
+      "mean": 0,
+      "min": 0,
+      "max": 0,
+      "values": [
+        0
+      ]
+    },
+    "p50": {
+      "mean": 235.74,
+      "min": 235.74,
+      "max": 235.74,
+      "values": [
+        235.74
+      ]
+    },
+    "p95": {
+      "mean": 394.03,
+      "min": 394.03,
+      "max": 394.03,
+      "values": [
+        394.03
+      ]
+    },
+    "p99": {
+      "mean": 2603.09,
+      "min": 2603.09,
+      "max": 2603.09,
+      "values": [
+        2603.09
+      ]
+    },
+    "min": {
+      "mean": 67.81,
+      "min": 67.81,
+      "max": 67.81,
+      "values": [
+        67.81
+      ]
+    },
+    "max": {
+      "mean": 2684.38,
+      "min": 2684.38,
+      "max": 2684.38,
+      "values": [
+        2684.38
+      ]
+    },
+    "avg": {
+      "mean": 287.02,
+      "min": 287.02,
+      "max": 287.02,
+      "values": [
+        287.02
+      ]
+    }
+  },
+  "downstreamCompletion": {
+    "databaseEvents": {
+      "orders": 3499,
+      "paymentEvents": 103,
+      "inventoryEvents": 52248,
+      "notificationSent": 209,
+      "analyticsTracked": 418,
+      "finalInventory": {
+        "available": 947722,
+        "reserved": 52278
+      },
+      "totalAcceptedRequests": 3499,
+      "duplicatePaymentEffects": 0,
+      "duplicateInventoryEffects": 0,
+      "dlqMessages": 1865,
+      "mainQueueBacklog": 436784,
+      "note": "Async: notifications/analytics are in-memory (reported via /debug endpoints); payment/inventory persist to PostgreSQL."
+    },
+    "queueState": [
+      {
+        "name": "payment.order.queue.dlq",
+        "messages": 0,
+        "messagesReady": 0,
+        "messagesUnacknowledged": 0
+      },
+      {
+        "name": "payment.order.queue",
+        "messages": 149567,
+        "messagesReady": 149566,
+        "messagesUnacknowledged": 1
+      },
+      {
+        "name": "notification.order.queue.dlq",
+        "messages": 0,
+        "messagesReady": 0,
+        "messagesUnacknowledged": 0
+      },
+      {
+        "name": "inventory.order.queue",
+        "messages": 1674,
+        "messagesReady": 1673,
+        "messagesUnacknowledged": 1
+      },
+      {
+        "name": "inventory.order.queue.dlq",
+        "messages": 1865,
+        "messagesReady": 1865,
+        "messagesUnacknowledged": 0
+      },
+      {
+        "name": "notification.order.queue",
+        "messages": 146079,
+        "messagesReady": 146078,
+        "messagesUnacknowledged": 1
+      },
+      {
+        "name": "analytics.order.queue",
+        "messages": 140449,
+        "messagesReady": 140448,
+        "messagesUnacknowledged": 1
+      },
+      {
+        "name": "analytics.order.queue.dlq",
+        "messages": 0,
+        "messagesReady": 0,
+        "messagesUnacknowledged": 0
+      }
+    ],
+    "queueDrainTimedOut": true,
+    "drainWindowMs": 120000,
+    "drainSecondsUsed": 122.3,
+    "remainingBacklogMessages": 438441,
+    "consumerProcessingCount": 4
+  },
+  "environment": {
+    "note": "Local development environment - NOT a production capacity estimate.",
+    "os": "Windows 11 Home Single Language",
+    "cpu": "AMD Ryzen 5 5625U (6C/12T)",
+    "ramGb": 7.4,
+    "docker": "29.0.1",
+    "node": "v24.15.0",
+    "k6": "grafana/k6 (docker image)",
+    "concurrency": [
+      100,
+      500,
+      1000
+    ],
+    "duration": "10s",
+    "iterations": 1,
+    "delaysMs": {
+      "payment": 2000,
+      "inventory": 100,
+      "notification": 1000,
+      "analytics": 500
+    },
+    "initialStock": 1000000
+  },
+  "generatedAt": "2026-09-28T12:24:31.213Z"
+}
